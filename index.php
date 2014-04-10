@@ -60,7 +60,7 @@ class contentOverview extends Plugin {
             if ($i % $tilenumber == $tilenumber-1) $content .= '</div>';
         }
 
-        $content .= '</div></div><br style="clear:both;" />';
+        $content .= '</div><br style="clear:both;" />';
 
         return $content;
     }
@@ -121,8 +121,12 @@ class contentOverview extends Plugin {
                 $pagename = substr($page,strpos($page, '%2F')+3); // real page name without '/'
                 $catname = $page;
             }
-            if ($cat != $page and PAGE_REQUEST != $page) {
-                $content .= '[liste|[seite=<span>'. urldecode($pagename) . '</span>|@='. $catname . ':'. $pagename . '=@]]';
+            if ($cat != $page) {
+                if (PAGE_REQUEST != $page) {
+                    $content .= '[liste|[seite=<span>'. urldecode($pagename) . '</span>|@='. $catname . ':'. $pagename . '=@]]';
+                } else {
+                    $content .= '[liste|' . $pagename . ']';
+                }
             }
         }
 
