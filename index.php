@@ -199,7 +199,7 @@ class contentOverview extends Plugin {
             // Name des Autors
             'HPdesigner',
             // Download-URL
-            'http://www.devmount.de/Develop/Mozilo%20Plugins/contentOverview.html',
+            'http://www.devmount.de/Develop/moziloCMS/Plugins/contentOverview.html',
             array(
                 '{contentOverview|tiles}' => 'Untermenü als Kacheln (nur Titel)',
                 '{contentOverview|list}'  => 'Untermenü als Liste (Titel und Beschreibungen)',
