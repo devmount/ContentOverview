@@ -38,15 +38,21 @@ if (!defined('IS_CMS')) {
  */
 class contentOverview extends Plugin
 {
+    // language
+    private $_admin_lang;
+    private $_cms_lang;
+
     // plugin information
     const PLUGIN_AUTHOR  = 'HPdesigner';
     const PLUGIN_DOCU
         = 'http://devmount.de/Develop/moziloCMS/Plugins/contentOverview.html';
     const PLUGIN_TITLE   = 'contentOverview';
-    const PLUGIN_VERSION = 'v0.x.jjjj-mm-dd';
+    const PLUGIN_VERSION = 'v0.0.2013-09-10';
     const MOZILO_VERSION = '2.0';
     private $_plugin_tags = array(
-        'tag1' => '{contentOverview|type|<param1>|<param2>}',
+        'tag1' => '{contentOverview|tiles}',
+        'tag2' => '{contentOverview|list}',
+        'tag3' => '{contentOverview|links}',
     );
 
     const LOGO_URL = 'http://media.devmount.de/logo_pluginconf.png';
@@ -338,7 +344,9 @@ class contentOverview extends Plugin
             self::MOZILO_VERSION,
             $this->_admin_lang->getLanguageValue(
                 'description',
-                htmlspecialchars($this->_plugin_tags['tag1'])
+                htmlspecialchars($this->_plugin_tags['tag1']),
+                htmlspecialchars($this->_plugin_tags['tag2']),
+                htmlspecialchars($this->_plugin_tags['tag3'])
             ),
             self::PLUGIN_AUTHOR,
             self::PLUGIN_DOCU,
@@ -347,35 +355,6 @@ class contentOverview extends Plugin
 
         return $info;
     }
-
-    // function getInfo()
-    // {
-    //     global $ADMIN_CONF;
-    //     $language = $ADMIN_CONF->get("language");
-
-    //     $info['deDE'] = array(
-    //         // Plugin-Name
-    //         '<b>contentOverview</b> v0.0.2013-09-10',
-    //         // CMS-Version
-    //         "2.0",
-    //         // Kurzbeschreibung
-    //         '{contentOverview|tiles} erstellt das Untermenü der aktuellen Kategorie in Kachelansicht.<br />
-    //         {contentOverview|list} erstellt das Untermenü der aktuellen Kategorie in Listenansicht.<br />
-    //         {contentOverview|links} erstellt eine Liste von Seitenlinks zu den anderen Seiten der aktuellen Kategorie.<br />
-    //         <b>Achtung:</b> Wird eine Kategorie umbenannt, gehen die dafür gesetzten Beschreibungen verloren!',
-    //         // Name des Autors
-    //         'HPdesigner',
-    //         // Download-URL
-    //         'http://www.devmount.de/Develop/moziloCMS/Plugins/contentOverview.html',
-    //         array(
-    //             '{contentOverview|tiles}' => 'Untermenü als Kacheln (nur Titel)',
-    //             '{contentOverview|list}'  => 'Untermenü als Liste (Titel und Beschreibungen)',
-    //             '{contentOverview|links}'  => 'Liste von Links zu anderen Seiten der aktuellen Kategorie',
-    //         )
-    //     );
-
-    //     if(isset($info[$language])) return $info[$language]; else return $info['deDE'];
-    // }
 
 }
 ?>
