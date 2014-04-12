@@ -1,32 +1,87 @@
-<?php if(!defined('IS_CMS')) die();
+<?php
 
 /**
- * Plugin:   contentOverview
- * @author:  HPdesigner (hpdesigner[at]web[dot]de)
- * @version: v0.0.2013-09-10
- * @license: GPL
+ * moziloCMS Plugin: contentOverview
+ *
+ * Returns a different styled list of content pages of current category
+ *
+ * PHP version 5
+ *
+ * @category PHP
+ * @package  PHP_MoziloPlugins
+ * @author   HPdesigner <mail@devmount.de>
+ * @license  GPL v3+
+ * @version  GIT: v0.0.2013-09-10
+ * @link     https://github.com/devmount/contentOverview
+ * @link     http://devmount.de/Develop/moziloCMS/Plugins/contentOverview.html
+ * @see      Verse
+ *           – The Bible
  *
  * Plugin created by DEVMOUNT
  * www.devmount.de
  *
-**/
+ */
 
-class contentOverview extends Plugin {
+// only allow moziloCMS environment
+if (!defined('IS_CMS')) {
+    die();
+}
 
-    function getContent($value) {
+/**
+ * contentOverview Class
+ *
+ * @category PHP
+ * @package  PHP_MoziloPlugins
+ * @author   HPdesigner <mail@devmount.de>
+ * @license  GPL v3+
+ * @link     https://github.com/devmount/contentOverview
+ */
+class contentOverview extends Plugin
+{
+    // plugin information
+    const PLUGIN_AUTHOR  = 'HPdesigner';
+    const PLUGIN_DOCU
+        = 'http://devmount.de/Develop/moziloCMS/Plugins/contentOverview.html';
+    const PLUGIN_TITLE   = 'contentOverview';
+    const PLUGIN_VERSION = 'v0.x.jjjj-mm-dd';
+    const MOZILO_VERSION = '2.0';
+    private $_plugin_tags = array(
+        'tag1' => '{contentOverview|type|<param1>|<param2>}',
+    );
 
-        // get mode
+    const LOGO_URL = 'http://media.devmount.de/logo_pluginconf.png';
+
+    /**
+     * creates plugin content
+     *
+     * @param string $value Parameter divided by '|'
+     *
+     * @return string HTML output
+     */
+    function getContent($value)
+    {
+        // call given mode
         switch ($value) {
-            case 'tiles': return $this->catTiles(); break;
-            case 'list': return $this->catList(); break;
-            case 'links': return $this->catLinks(); break;
-            default: return $this->noMode(); break;
+        case 'tiles':
+            return $this->catTiles(); break;
+        case 'list':
+            return $this->catList(); break;
+        case 'links':
+            return $this->catLinks(); break;
+        default:
+            return $this->noMode(); break;
         }
 
-        return null;
+        return $this->noMode();
     }
 
-    function catTiles() {
+    /**
+     * returns list formatted as tiles
+     *
+     * @return string html output
+     */
+    function catTiles()
+    {
         global $CatPage;
 
         // get conf
@@ -34,38 +89,66 @@ class contentOverview extends Plugin {
         $col = 15/$tilenumber;
 
         // get pages of current cat
-        $pagearray = $CatPage->get_PageArray(CAT_REQUEST, array(EXT_PAGE, EXT_HIDDEN));
-        $cat = substr(CAT_REQUEST,strpos(CAT_REQUEST, '%2F')+3); // real cat name without '/'
+        $pagearray = $CatPage->get_PageArray(
+            CAT_REQUEST,
+            array(EXT_PAGE, EXT_HIDDEN)
+        );
+        // real cat name without '/'
+        $cat = substr(CAT_REQUEST, strpos(CAT_REQUEST, '%2F')+3);
 
         // remove page = category
-        for ($i=0; $i < count($pagearray); $i++) if ($cat == $pagearray[$i]) unset($pagearray[$i]);
+        for ($i=0; $i < count($pagearray); $i++) {
+            if ($cat == $pagearray[$i]) {
+                unset($pagearray[$i]);
+            }
+        }
         $pagearray = array_values($pagearray);
 
         $content = '';
 
-        // build tiles content
+        // build tile for each content page
         for ($i=0; $i < count($pagearray); $i++) {
             $pagename = $pagearray[$i];
             $catname = CAT_REQUEST;
-            // if pagename contains Kategorie, extract the name, rebuild the category
+            // if pagename contains category, extract the name, rebuild the category
             if (strpos($pagearray[$i], '%2F') !== false) {
-                $pagename = substr($pagearray[$i],strpos($pagearray[$i], '%2F')+3); // real page name without '/'
+                // real page name without '/'
+                $pagename = substr($pagearray[$i], strpos($pagearray[$i], '%2F')+3);
                 $catname = $pagearray[$i];
             }
-            // build rows TODO fix
-            if ($i % $tilenumber == 0) $content .= '<div class="row">';
-            $content .= '<div class="large-' . $col . ' large-uncentered columns box">';
-            $content .= '[seite=<span>'. urldecode($pagename) . '</span>|@='. $catname . ':'. $pagename . '=@]';
+            // build rows
+            if ($i % $tilenumber == 0) {
+                $content .= '<div class="row">';
+            }
+            $content .=
+                '<div
+                    class="large-' . $col . ' large-uncentered columns box"
+                >';
+            // build page link with mozilo syntax [seite|...]
+            $content .=
+                '[seite=<span>'. urldecode($pagename) . '</span>
+                    |@='. $catname . ':'. $pagename . '=@]';
             $content .= '</div>';
-            if ($i % $tilenumber == $tilenumber-1) $content .= '</div>';
+            if ($i % $tilenumber == $tilenumber-1) {
+                $content .= '</div>';
+            }
         }
-
-        $content .= '</div><br style="clear:both;" />';
+        if (count($pagearray) % $tilenumber != 0) {
+            $content .= '</div>';
+        }
+        // clear floats
+        $content .= '<br style="clear:both;" />';
 
         return $content;
     }
 
-    function catList() {
+    /**
+     * returns list formatted as list
+     *
+     * @return string html output
+     */
+    function catList()
+    {
         global $CatPage;
 
         // get conf
@@ -73,26 +156,32 @@ class contentOverview extends Plugin {
 
         // get pages of current cat
         $pagearray = $CatPage->get_PageArray(CAT_REQUEST, array(EXT_PAGE));
-        $cat = substr(CAT_REQUEST,strripos(CAT_REQUEST, '%2F')+3);
+        $cat = substr(CAT_REQUEST, strripos(CAT_REQUEST, '%2F')+3);
 
         $content = '';
 
+        // build listbox for each page
         foreach ($pagearray as $page) {
             $pagename = $page;
             $catname = CAT_REQUEST;
-            // if pagename contains Kategorie, extract the name, rebuild the category
+            // if pagename contains category, extract the name, rebuild the category
             if (strpos($page, '%2F') !== false) {
-                $pagename = substr($page,strpos($page, '%2F')+3); // real page name without '/'
+                // real page name without '/'
+                $pagename = substr($page, strpos($page, '%2F')+3);
                 $catname = $page;
             }
+            // only take pages unlike category
             if ($cat != $page) {
                 $content .= '<div class="row collapse listboxrow">';
                 $content .=     '<div class="large-5 columns listbox">';
-                $content .=     '[seite=<span>'. urldecode($pagename) . '</span>|@='. $catname . ':'. $pagename . '=@]';
+                $content .=     '[seite=<span>'. urldecode($pagename) . '</span>
+                                    |@='. $catname . ':'. $pagename . '=@]';
                 $content .=     '</div>';
                 $content .=     '<div class="large-10 columns listboxdescription">';
                 $description = $this->settings->get('conf_' . $page);
-                if (isset($description)) $content .= $description;
+                if (isset($description)) {
+                    $content .= $description;
+                }
                 $content .=     '</div>';
                 $content .= '</div>';
             }
@@ -101,7 +190,13 @@ class contentOverview extends Plugin {
         return $content;
     }
 
-    function catLinks() {
+    /**
+     * returns list formatted as tiles
+     *
+     * @return string html output
+     */
+    function catLinks()
+    {
         global $CatPage;
 
         // get conf
@@ -109,21 +204,26 @@ class contentOverview extends Plugin {
 
         // get pages of current cat
         $pagearray = $CatPage->get_PageArray(CAT_REQUEST, array(EXT_PAGE));
-        $cat = substr(CAT_REQUEST,strripos(CAT_REQUEST, '%2F')+3);
+        $cat = substr(CAT_REQUEST, strripos(CAT_REQUEST, '%2F')+3);
 
         $content = '';
 
+        // build list item for each page
         foreach ($pagearray as $page) {
             $pagename = $page;
             $catname = CAT_REQUEST;
-            // if pagename contains Kategorie, extract the name, rebuild the category
+            // if pagename contains category, extract the name, rebuild the category
             if (strpos($page, '%2F') !== false) {
-                $pagename = substr($page,strpos($page, '%2F')+3); // real page name without '/'
+                // real page name without '/'
+                $pagename = substr($page, strpos($page, '%2F')+3);
                 $catname = $page;
             }
+            // only take pages unlike category
             if ($cat != $page) {
                 if (PAGE_REQUEST != $page) {
-                    $content .= '[liste|[seite=<span>'. urldecode($pagename) . '</span>|@='. $catname . ':'. $pagename . '=@]]';
+                    $content .=
+                        '[liste|[seite=<span>'. urldecode($pagename) . '</span>
+                            |@='. $catname . ':'. $pagename . '=@]]';
                 } else {
                     $content .= '[liste|' . $pagename . ']';
                 }
@@ -133,13 +233,24 @@ class contentOverview extends Plugin {
         return $content;
     }
 
-    function noMode() {
+    /**
+     * returns warning of wrong or no mode
+     *
+     * @return string html output
+     */
+    function noMode()
+    {
         $content = 'Bitte einen gültigen Modus angeben.';
         return $content;
     }
 
-
-    function getConfig() {
+    /**
+     * sets backend configuration elements and template
+     *
+     * @return Array configuration
+     */
+    function getConfig()
+    {
         global $CatPage;
         $pages = array();
         $catarr = $CatPage->get_CatArray();
@@ -174,45 +285,97 @@ class contentOverview extends Plugin {
 
         // Template
         $config['--template~~'] = '
-                <div class="mo-in-li-l" style="width:34%;">{tilenumber_description}</div>
-                <div class="mo-in-li-r" style="width:64%;">{tilenumber_text}</div>';
+            <div class="mo-in-li-l" style="width:34%;">
+                {tilenumber_description}
+            </div>
+            <div class="mo-in-li-r" style="width:64%;">
+                {tilenumber_text}
+        ';
         foreach ($pages as $page => $value) {
-        $config['--template~~'] .= '</li>
-            <li class="mo-in-ul-li mo-inline ui-widget-content ui-corner-all ui-helper-clearfix">
-                <div class="mo-in-li-l" style="width:34%;">{conf_' . $page . '_description}</div>
-                <div class="mo-in-li-r" style="width:64%;">{conf_' . $page . '_textarea}';
+            $config['--template~~'] .=
+                '</div>
+            </li>
+            <li class="
+                mo-in-ul-li
+                mo-inline
+                ui-widget-content
+                ui-corner-all
+                ui-helper-clearfix
+            ">
+                <div class="mo-in-li-l" style="width:34%;">
+                    {conf_' . $page . '_description}
+                </div>
+                <div class="mo-in-li-r" style="width:64%;">
+                    {conf_' . $page . '_textarea}';
         }
         return $config;
     }
 
-
-    function getInfo() {
+    /**
+     * sets backend plugin information
+     *
+     * @return Array information
+     */
+    function getInfo()
+    {
         global $ADMIN_CONF;
-        $language = $ADMIN_CONF->get("language");
 
-        $info['deDE'] = array(
-            // Plugin-Name
-            '<b>contentOverview</b> v0.0.2013-09-10',
-            // CMS-Version
-            "2.0",
-            // Kurzbeschreibung
-            '{contentOverview|tiles} erstellt das Untermenü der aktuellen Kategorie in Kachelansicht.<br />
-            {contentOverview|list} erstellt das Untermenü der aktuellen Kategorie in Listenansicht.<br />
-            {contentOverview|links} erstellt eine Liste von Seitenlinks zu den anderen Seiten der aktuellen Kategorie.<br />
-            <b>Achtung:</b> Wird eine Kategorie umbenannt, gehen die dafür gesetzten Beschreibungen verloren!',
-            // Name des Autors
-            'HPdesigner',
-            // Download-URL
-            'http://www.devmount.de/Develop/moziloCMS/Plugins/contentOverview.html',
-            array(
-                '{contentOverview|tiles}' => 'Untermenü als Kacheln (nur Titel)',
-                '{contentOverview|list}'  => 'Untermenü als Liste (Titel und Beschreibungen)',
-                '{contentOverview|links}'  => 'Liste von Links zu anderen Seiten der aktuellen Kategorie',
-            )
+        $this->_admin_lang = new Language(
+            $this->PLUGIN_SELF_DIR
+            . 'lang/admin_language_'
+            . $ADMIN_CONF->get('language')
+            . '.txt'
         );
 
-        if(isset($info[$language])) return $info[$language]; else return $info['deDE'];
+        // build plugin tags
+        $tags = array();
+        foreach ($this->_plugin_tags as $key => $tag) {
+            $tags[$tag] = $this->_admin_lang->getLanguageValue('tag_' . $key);
+        }
+
+        $info = array(
+            '<b>' . self::PLUGIN_TITLE . '</b> ' . self::PLUGIN_VERSION,
+            self::MOZILO_VERSION,
+            $this->_admin_lang->getLanguageValue(
+                'description',
+                htmlspecialchars($this->_plugin_tags['tag1'])
+            ),
+            self::PLUGIN_AUTHOR,
+            self::PLUGIN_DOCU,
+            $tags
+        );
+
+        return $info;
     }
+
+    // function getInfo()
+    // {
+    //     global $ADMIN_CONF;
+    //     $language = $ADMIN_CONF->get("language");
+
+    //     $info['deDE'] = array(
+    //         // Plugin-Name
+    //         '<b>contentOverview</b> v0.0.2013-09-10',
+    //         // CMS-Version
+    //         "2.0",
+    //         // Kurzbeschreibung
+    //         '{contentOverview|tiles} erstellt das Untermenü der aktuellen Kategorie in Kachelansicht.<br />
+    //         {contentOverview|list} erstellt das Untermenü der aktuellen Kategorie in Listenansicht.<br />
+    //         {contentOverview|links} erstellt eine Liste von Seitenlinks zu den anderen Seiten der aktuellen Kategorie.<br />
+    //         <b>Achtung:</b> Wird eine Kategorie umbenannt, gehen die dafür gesetzten Beschreibungen verloren!',
+    //         // Name des Autors
+    //         'HPdesigner',
+    //         // Download-URL
+    //         'http://www.devmount.de/Develop/moziloCMS/Plugins/contentOverview.html',
+    //         array(
+    //             '{contentOverview|tiles}' => 'Untermenü als Kacheln (nur Titel)',
+    //             '{contentOverview|list}'  => 'Untermenü als Liste (Titel und Beschreibungen)',
+    //             '{contentOverview|links}'  => 'Liste von Links zu anderen Seiten der aktuellen Kategorie',
+    //         )
+    //     );
+
+    //     if(isset($info[$language])) return $info[$language]; else return $info['deDE'];
+    // }
 
 }
 ?>
