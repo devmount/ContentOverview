@@ -69,13 +69,17 @@ class contentOverview extends Plugin
         // call given mode
         switch ($value) {
         case 'tiles':
-            return $this->catTiles(); break;
+            return $this->catTiles();
+            break;
         case 'list':
-            return $this->catList(); break;
+            return $this->catList();
+            break;
         case 'links':
-            return $this->catLinks(); break;
+            return $this->catLinks();
+            break;
         default:
-            return $this->noMode(); break;
+            return $this->noMode();
+            break;
         }
 
         return $this->noMode();
@@ -289,8 +293,18 @@ class contentOverview extends Plugin
             );
         }
 
+        // read admin.css
+        $admin_css = '';
+        $lines = file('../plugins/' . self::PLUGIN_TITLE. '/admin.css');
+        foreach ($lines as $line_num => $line) {
+            $admin_css .= trim($line);
+        }
+
+        // add template CSS
+        $template = '<style>' . $admin_css . '</style>';
+
         // Template
-        $config['--template~~'] = '
+        $template = '
             <div class="mo-in-li-l" style="width:34%;">
                 {tilenumber_description}
             </div>
@@ -298,7 +312,7 @@ class contentOverview extends Plugin
                 {tilenumber_text}
         ';
         foreach ($pages as $page => $value) {
-            $config['--template~~'] .=
+            $template .=
                 '</div>
             </li>
             <li class="
@@ -314,6 +328,9 @@ class contentOverview extends Plugin
                 <div class="mo-in-li-r" style="width:64%;">
                     {conf_' . $page . '_textarea}';
         }
+
+        $config['--template~~'] = $template;
+
         return $config;
     }
 
