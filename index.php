@@ -11,7 +11,7 @@
  * @package  PHP_MoziloPlugins
  * @author   HPdesigner <mail@devmount.de>
  * @license  GPL v3+
- * @version  GIT: v0.0.2013-09-10
+ * @version  GIT: v0.1.2014-04-14
  * @link     https://github.com/devmount/ContentOverview
  * @link     http://devmount.de/Develop/moziloCMS/Plugins/ContentOverview.html
  * @see      Verse
@@ -47,7 +47,7 @@ class ContentOverview extends Plugin
     const PLUGIN_DOCU
         = 'http://devmount.de/Develop/moziloCMS/Plugins/ContentOverview.html';
     const PLUGIN_TITLE   = 'ContentOverview';
-    const PLUGIN_VERSION = 'v0.0.2013-09-10';
+    const PLUGIN_VERSION = 'v0.1.2014-04-14';
     const MOZILO_VERSION = '2.0';
     private $_plugin_tags = array(
         'tag1' => '{ContentOverview|tiles}',
