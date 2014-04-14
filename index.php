@@ -1,7 +1,7 @@
 <?php
 
 /**
- * moziloCMS Plugin: contentOverview
+ * moziloCMS Plugin: ContentOverview
  *
  * Returns a different styled list of content pages of current category
  *
@@ -12,8 +12,8 @@
  * @author   HPdesigner <mail@devmount.de>
  * @license  GPL v3+
  * @version  GIT: v0.0.2013-09-10
- * @link     https://github.com/devmount/contentOverview
- * @link     http://devmount.de/Develop/moziloCMS/Plugins/contentOverview.html
+ * @link     https://github.com/devmount/ContentOverview
+ * @link     http://devmount.de/Develop/moziloCMS/Plugins/ContentOverview.html
  * @see      Verse
  *           – The Bible
  *
@@ -28,15 +28,15 @@ if (!defined('IS_CMS')) {
 }
 
 /**
- * contentOverview Class
+ * ContentOverview Class
  *
  * @category PHP
  * @package  PHP_MoziloPlugins
  * @author   HPdesigner <mail@devmount.de>
  * @license  GPL v3+
- * @link     https://github.com/devmount/contentOverview
+ * @link     https://github.com/devmount/ContentOverview
  */
-class contentOverview extends Plugin
+class ContentOverview extends Plugin
 {
     // language
     private $_admin_lang;
@@ -45,14 +45,14 @@ class contentOverview extends Plugin
     // plugin information
     const PLUGIN_AUTHOR  = 'HPdesigner';
     const PLUGIN_DOCU
-        = 'http://devmount.de/Develop/moziloCMS/Plugins/contentOverview.html';
-    const PLUGIN_TITLE   = 'contentOverview';
+        = 'http://devmount.de/Develop/moziloCMS/Plugins/ContentOverview.html';
+    const PLUGIN_TITLE   = 'ContentOverview';
     const PLUGIN_VERSION = 'v0.0.2013-09-10';
     const MOZILO_VERSION = '2.0';
     private $_plugin_tags = array(
-        'tag1' => '{contentOverview|tiles}',
-        'tag2' => '{contentOverview|list}',
-        'tag3' => '{contentOverview|links}',
+        'tag1' => '{ContentOverview|tiles}',
+        'tag2' => '{ContentOverview|list}',
+        'tag3' => '{ContentOverview|links}',
     );
 
     const LOGO_URL = 'http://media.devmount.de/logo_pluginconf.png';
@@ -275,21 +275,21 @@ class contentOverview extends Plugin
 
         // Number of tiles in one line
         $config['tilenumber']  = array(
-            "type" => "text",
-            "description" => 'Anzahl an Kacheln in einer Reihe',
-            "maxlength" => "100",
-            "size" => "4",
-            "regex" => "/^[1-9]{1,2}$/",
-            "regex_error" => 'Bitte eine Zahl zwischen 1 und 9 eingeben'
+            'type' => 'text',
+            'description' => 'Anzahl an Kacheln in einer Reihe',
+            'maxlength' => '100',
+            'size' => '4',
+            'regex' => "/^[1-9]{1,2}$/",
+            'regex_error' => 'Bitte eine Zahl zwischen 1 und 9 eingeben'
         );
 
         // Categories / Page Description
         foreach ($pages as $page => $value) {
             $config['conf_' . $page] = array(
-                "type" => "textarea",
-                "description" => '<b>' . urldecode($page) . '</b> Beischreibung',
-                "cols" => "98",
-                "rows" => "3"
+                'type' => 'textarea',
+                'description' => '<b>' . urldecode($page) . '</b>',
+                'cols' => '',
+                'rows' => '1'
             );
         }
 
@@ -304,29 +304,38 @@ class contentOverview extends Plugin
         $template = '<style>' . $admin_css . '</style>';
 
         // Template
-        $template = '
-            <div class="mo-in-li-l" style="width:34%;">
+        $template .= '
+            <div class="contentoverview-admin-header">
+            <span>'
+                . $this->_admin_lang->getLanguageValue(
+                    'admin_header',
+                    self::PLUGIN_TITLE
+                )
+            . '</span>
+            <a href="' . self::PLUGIN_DOCU . '" target="_blank">
+            <img style="float:right;" src="' . self::LOGO_URL . '" />
+            </a>
+            </div>
+        </li>
+        <li class="mo-in-ul-li ui-widget-content contentoverview-admin-li">
+            <div class="contentoverview-admin-subheader">'
+            . $this->_admin_lang->getLanguageValue('admin_tiles')
+            . '</div>
+            <div style="margin-bottom:5px;">
+                    {tilenumber_text}
                 {tilenumber_description}
             </div>
-            <div class="mo-in-li-r" style="width:64%;">
-                {tilenumber_text}
+        </li>
+        <li class="mo-in-ul-li ui-widget-content contentoverview-admin-li">
+            <div class="contentoverview-admin-subheader">'
+            . $this->_admin_lang->getLanguageValue('admin_description')
+            . '</div>
+            <div style="margin-bottom:5px;">
         ';
         foreach ($pages as $page => $value) {
             $template .=
-                '</div>
-            </li>
-            <li class="
-                mo-in-ul-li
-                mo-inline
-                ui-widget-content
-                ui-corner-all
-                ui-helper-clearfix
-            ">
-                <div class="mo-in-li-l" style="width:34%;">
-                    {conf_' . $page . '_description}
-                </div>
-                <div class="mo-in-li-r" style="width:64%;">
-                    {conf_' . $page . '_textarea}';
+                '{conf_' . $page . '_description}
+                {conf_' . $page . '_textarea}';
         }
 
         $config['--template~~'] = $template;
