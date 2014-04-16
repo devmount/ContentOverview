@@ -14,8 +14,6 @@
  * @version  GIT: v0.1.2014-04-14
  * @link     https://github.com/devmount/ContentOverview
  * @link     http://devmount.de/Develop/moziloCMS/Plugins/ContentOverview.html
- * @see      Verse
- *           – The Bible
  *
  * Plugin created by DEVMOUNT
  * www.devmount.de
