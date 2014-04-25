@@ -17,7 +17,7 @@ Installing a plugin manually requires FTP Access.
 
 ## Syntax
 ```{ContentOverview|<mode>}```
-Here comes the general description of the plugin tag.
+Inserts the table of contents, depending on mode.
 
 1. Parameter ```<mode>```: Possible values are: ```tiles```,  ```list``` and  ```links```.
 
