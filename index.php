@@ -233,7 +233,7 @@ class ContentOverview extends Plugin
                         '[liste|[seite=<span>'. urldecode($pagename) . '</span>
                             |@='. $catname . ':'. $pagename . '=@]]';
                 } else {
-                    $content .= '[liste|' . $pagename . ']';
+                    $content .= '[liste|' . urldecode($pagename) . ']';
                 }
             }
         }
