@@ -9,7 +9,7 @@
  *
  * @category PHP
  * @package  PHP_MoziloPlugins
- * @author   HPdesigner <mail@devmount.de>
+ * @author   DEVMOUNT <mail@devmount.de>
  * @license  GPL v3+
  * @version  GIT: v0.1.2014-04-14
  * @link     https://github.com/devmount/ContentOverview
@@ -30,7 +30,7 @@ if (!defined('IS_CMS')) {
  *
  * @category PHP
  * @package  PHP_MoziloPlugins
- * @author   HPdesigner <mail@devmount.de>
+ * @author   DEVMOUNT <mail@devmount.de>
  * @license  GPL v3+
  * @link     https://github.com/devmount/ContentOverview
  */
@@ -41,12 +41,13 @@ class ContentOverview extends Plugin
     private $_cms_lang;
 
     // plugin information
-    const PLUGIN_AUTHOR  = 'HPdesigner';
-    const PLUGIN_DOCU
-        = 'http://devmount.de/Develop/moziloCMS/Plugins/ContentOverview.html';
+    const PLUGIN_AUTHOR  = 'DEVMOUNT';
     const PLUGIN_TITLE   = 'ContentOverview';
     const PLUGIN_VERSION = 'v0.1.2014-04-14';
     const MOZILO_VERSION = '2.0';
+    const PLUGIN_DOCU
+        = 'http://devmount.de/Develop/moziloCMS/Plugins/ContentOverview.html';
+
     private $_plugin_tags = array(
         'tag1' => '{ContentOverview|tiles}',
         'tag2' => '{ContentOverview|list}',
@@ -373,7 +374,11 @@ class ContentOverview extends Plugin
                 htmlspecialchars($this->_plugin_tags['tag3'])
             ),
             self::PLUGIN_AUTHOR,
-            self::PLUGIN_DOCU,
+            array(
+                self::PLUGIN_DOCU,
+                self::PLUGIN_TITLE . ' '
+                . $this->_admin_lang->getLanguageValue('on_devmount')
+            ),
             $tags
         );
 

@@ -2,6 +2,7 @@ tag1              = Untermenü als Kacheln (nur Titel)
 tag2              = Untermenü als Liste (Titel und Beschreibungen)
 tag3              = Liste von Links zu anderen Seiten der aktuellen Kategorie (nur Name)
 description       = Generiert die Übersicht der Inhaltsseiten der aktuellen Kategorie <br /><br /><span class='plugindraft-bold'>Nutzung:</span><br /><span class='plugindraft-code'>{PARAM1}</span> Erstellt das Untermenü der aktuellen Kategorie in Kachelansicht.<br /><br /><span class='plugindraft-code'>{PARAM2}</span> Erstellt das Untermenü der aktuellen Kategorie in Listenansicht.<br /><br /><span class='plugindraft-code'>{ContentOverview|links}</span> Erstellt eine Liste von Seitenlinks zu den anderen Seiten der aktuellen Kategorie.<br /><br /><span class='plugindraft-bold'>Dokumentation:</span><br />Eine ausführliche Dokumentation ist auf <span class="plugindraft-italic">www.devmount.de</span> zu finden (siehe obenstehender Link).
+on_devmount       = auf devmount.de
 admin_header      = {PARAM1} Plugin Konfiguration
 admin_tiles       = Kacheln
 admin_description = Beschreibungen der Inhaltsseiten
