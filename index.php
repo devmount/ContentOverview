@@ -266,7 +266,7 @@ class ContentOverview extends Plugin
         foreach ($catarr as $cat) {
             $pagearr = $CatPage->get_PageArray($cat);
             foreach ($pagearr as $page) {
-                $pages[$page] = '';
+                $pages[$page] = $cat;
             }
         }
 
@@ -283,7 +283,7 @@ class ContentOverview extends Plugin
         );
 
         // Categories / Page Description
-        foreach ($pages as $page => $value) {
+        foreach ($pages as $page => $cat) {
             $config['conf_' . $page] = array(
                 'type' => 'textarea',
                 'description' => '<b>' . urldecode($page) . '</b>',
@@ -331,7 +331,7 @@ class ContentOverview extends Plugin
             . '</div>
             <div style="margin-bottom:5px;">
         ';
-        foreach ($pages as $page => $value) {
+        foreach ($pages as $page => $cat) {
             $template .=
                 '{conf_' . $page . '_description}
                 {conf_' . $page . '_textarea}';
@@ -369,9 +369,9 @@ class ContentOverview extends Plugin
             self::MOZILO_VERSION,
             $this->_admin_lang->getLanguageValue(
                 'description',
-                htmlspecialchars($this->_plugin_tags['tag1']),
-                htmlspecialchars($this->_plugin_tags['tag2']),
-                htmlspecialchars($this->_plugin_tags['tag3'])
+                htmlspecialchars($this->_plugin_tags['tag1'], ENT_COMPAT, 'UTF-8'),
+                htmlspecialchars($this->_plugin_tags['tag2'], ENT_COMPAT, 'UTF-8'),
+                htmlspecialchars($this->_plugin_tags['tag3'], ENT_COMPAT, 'UTF-8')
             ),
             self::PLUGIN_AUTHOR,
             array(
