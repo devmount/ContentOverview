@@ -12,7 +12,7 @@
  * @author   DEVMOUNT <mail@devmount.de>
  * @license  GPL v3+
  * @version  GIT: v0.1.2014-04-14
- * @link     https://github.com/devmount/ContentOverview
+ * @link     https://github.com/devmount-mozilo/ContentOverview
  * @link     http://devmount.de/Develop/moziloCMS/Plugins/ContentOverview.html
  *
  * Plugin created by DEVMOUNT
@@ -32,7 +32,7 @@ if (!defined('IS_CMS')) {
  * @package  PHP_MoziloPlugins
  * @author   DEVMOUNT <mail@devmount.de>
  * @license  GPL v3+
- * @link     https://github.com/devmount/ContentOverview
+ * @link     https://github.com/devmount-mozilo/ContentOverview
  */
 class ContentOverview extends Plugin
 {
